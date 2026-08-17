@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:workers_app/screens/apply_task_success_dialog.dart';
+import 'package:workers_app/screens/customer-task.dart';
 import 'package:workers_app/screens/profile_screen.dart';
 import 'package:workers_app/screens/requirements_dialog.dart';
 
 class MyTasksScreen extends StatefulWidget {
+ 
   const MyTasksScreen({super.key});
 
   @override
@@ -11,12 +13,32 @@ class MyTasksScreen extends StatefulWidget {
 }
 
 class _MyTasksScreenState extends State<MyTasksScreen> {
+  Future<void>taskscreenUpdate(
+   
+String jobCategory,
+String categoryName,
+String description,
+String location,
+String budget,
+)async
+{
+  const url = "https://chat.google.com/dm/gcsvGSAAAAE/7F6S3NHhIlQ/7F6S3NHhIlQ?cls=10";
+final Map<String, String> body = {
+  'job_category': jobCategory,
+  'category_name': categoryName,
+  'description': description,
+  'location': location,
+  'budget': budget,
+};
+
+}
+
   int _selectedTab = 0; // 0: Accepted Task, 1: In Progress, 2: Completed
   final int _currentIndex = 2;
 
   final List<String> _tabs = ['Accepted Task', 'In Progress', 'Completed'];
 
-  final List<Map<String, String>> _allTasks = [
+  final List<Map<String, String>> _allTasks = [ 
     {
       'title': 'Masonry',
       'price': '₹12,000/-',
@@ -164,18 +186,15 @@ class _MyTasksScreenState extends State<MyTasksScreen> {
                                 color: Colors.transparent,
                                 child: InkWell(
                                   borderRadius: BorderRadius.circular(12),
-                                    onTap: () async {
-                                      final result = await showDialog<String>(
-                                        context: context,
-                                        builder: (dialogContext) => const RequirementsDialog(),
-                                      );
-                                      if (result != null) {
-                                        if (!context.mounted) return;
-                                        showDialog(
-                                          context: context,
-                                          builder: (dialogContext) => const ApplyTaskSuccessDialog(),
-                                        );
-                                      }
+                                    onTap: () {
+                                        {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => customertask(),
+    ));
+                                    }
+                                      
                                     },
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,

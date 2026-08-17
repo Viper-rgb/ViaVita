@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:workers_app/screens/registration_success_dialog.dart';
 import 'package:workers_app/screens/sign_in_screen.dart';
 
@@ -10,6 +13,63 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  Future<bool> signinUser(
+    String name,
+    String gender,
+    String age,
+    String phone,
+    String email,
+    String _selectedState,
+    String _selectedDistrict,
+    String address,
+    String password, 
+ 
+  ) async {
+    final Map<String, String> body = {
+      'name': name,
+      'gender': gender,
+      'age': age,
+      'phone_number': phone,
+      'email': email,
+      'state': _selectedState,
+      'district': _selectedDistrict,
+      'address': address,
+      'password': password,
+   
+    };
+
+  
+    const String url = 'https://srishticampus.tech/bloodconnect/viavita_api/worker_reg.php';
+
+    try {
+      final response = await http.post(Uri.parse(url), body: body);
+      final jsonData = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(jsonData['message'] ?? 'Sign up successful')),
+
+        );
+        return true;
+      } else if (response.statusCode == 400) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(jsonData['error'] ?? jsonData['message'] ?? 'Invalid request')),
+        );
+        return false;
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Server error: ${response.statusCode}')),
+        );
+        return false;
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
+      );
+      return false;
+    }
+  }
+
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _nameController = TextEditingController();
@@ -517,7 +577,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     // Sign Up Button
                     _buildGradientButton(
                       text: "Sign up",
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           if (_idProofFileName == null) {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -525,10 +585,29 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             );
                             return;
                           }
-                          showDialog(
-                            context: context,
-                            builder: (context) => const RegistrationSuccessDialog(),
+
+                          final success = await signinUser(
+                            _nameController.text.trim(),
+                            _gender,
+                            _ageController.text.trim(),
+                            _phoneController.text.trim(),
+                            _emailController.text.trim(),
+                            _selectedState ?? '',
+                            _selectedDistrict ?? '',
+                            _addressController.text.trim(),
+                            _passwordController.text,
+                           
                           );
+
+                          if (success) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => const RegistrationSuccessDialog(),
+                             
+                              
+                            );
+                            
+                          }
                         }
                       },
                     ),

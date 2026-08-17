@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workers_app/Appimage.dart';
 import 'package:workers_app/screens/my_tasks_screen.dart';
 import 'package:workers_app/screens/profile_screen.dart';
 import 'package:workers_app/screens/subscription_plans_screen.dart';
@@ -54,7 +55,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
             Text(
               label,
               style: TextStyle(
-                fontSize: 12,
+              fontSize: 12,
                 color: Colors.grey.shade700,
                 fontWeight: FontWeight.w500,
               ),
@@ -75,10 +76,11 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
   }
 
   Widget _buildNavCard({
-    required IconData icon,
+    required String appimg,
     required String title,
     required VoidCallback onTap,
-  }) {
+  }) 
+  {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
@@ -100,7 +102,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
                     color: const Color(0xFFFFE5D8),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(icon, color: const Color(0xFFD32F2F), size: 20),
+                  child: Image.asset(appimg,width: 24,height: 24,fit: BoxFit.contain,),
                 ),
                 const SizedBox(width: 14),
                 Expanded(
@@ -142,7 +144,6 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Top profile & welcome area
                         Row(
                           children: [
                             const CircleAvatar(
@@ -186,7 +187,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
                         const SizedBox(height: 20),
 
                         // Search bar
-                        Container(
+                       Container(
                           decoration: BoxDecoration(
                             color: const Color(0xFFF8F8F8),
                             borderRadius: BorderRadius.circular(12),
@@ -205,7 +206,6 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
                         ),
                         const SizedBox(height: 20),
 
-                        // Two statistic cards
                         Row(
                           children: [
                             _buildStatCard("New Task", "14"),
@@ -217,7 +217,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
 
                         // Three navigation cards
                         _buildNavCard(
-                          icon: Icons.description_outlined,
+                          appimg: Appimages.viewall,
                           title: "View All Tasks",
                           onTap: () {
                             Navigator.push(
@@ -227,7 +227,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
                           },
                         ),
                         _buildNavCard(
-                          icon: Icons.podcasts,
+                          appimg: Appimages.managesub,
                           title: "Manage Subscription",
                           onTap: () {
                             Navigator.push(
@@ -237,12 +237,10 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
                           },
                         ),
                         _buildNavCard(
-                          icon: Icons.storefront_outlined,
+                          appimg: Appimages.visitshop,
                           title: "Visit Shop",
                           onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("Navigating to Shop")),
-                            );
+                           
                           },
                         ),
                       ],

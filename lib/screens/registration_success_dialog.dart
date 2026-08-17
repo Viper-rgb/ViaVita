@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workers_app/screens/sign_in_screen.dart';
 
 import 'package:workers_app/screens/subscription_plans_screen.dart';
 
@@ -26,7 +27,7 @@ class RegistrationSuccessDialog extends StatelessWidget {
                 onPressed: () {
                   
                   Navigator.push(context,MaterialPageRoute(
-                    builder: (context) => const SubscriptionPlansScreen()),
+                    builder: (context) => const SignInScreen()),
                   );
                 },
               ),

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:workers_app/screens/registration_screen.dart';
 import 'package:workers_app/screens/home_dashboard_screen.dart';
 import 'package:workers_app/screens/subscription_plans_screen.dart';
-
+import 'package:http/http.dart' as https;
+import 'dart:convert' ;
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
 
@@ -11,9 +12,38 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+   Future<void>registerUser(String email,String password,String device)async{
+   const   url = "https://srishticampus.tech/bloodconnect/viavita_api/login.php";
+   Map <String,String> body = {
+    "email":email,
+    "password":password,
+    "device_token":device,
+    
+   };
+   try {
+    final response = await https.post(Uri.parse(url),body:body);
+    var jsonData = json.decode(response.body);
+
+    if(response.statusCode == 200){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:  Text("Register Success")));
+      
+    }
+      else if (jsonData['success']==false){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:  Text("Register Failed")));
+      }
+      else{
+        print("api not working");
+      }
+    }
+    catch(e){
+      print(e.toString());
+    }
+   }
+  
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+ 
   bool _obscurePassword = true;
 
   @override
